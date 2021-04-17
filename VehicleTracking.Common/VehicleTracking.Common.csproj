@@ -48,6 +48,7 @@
     <Compile Include="Interfaces\IDataRepository.cs" />
     <Compile Include="Interfaces\ITrackingRepository.cs" />
     <Compile Include="Interfaces\IVehicleRepository.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

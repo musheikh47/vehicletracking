@@ -50,6 +50,10 @@
       <Project>{4c9069cf-db46-4ad9-ab37-3d98cbec8d32}</Project>
       <Name>VehicleTracking.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VehicleTracking.Factory\VehicleTracking.Factory.csproj">
+      <Project>{a3d14a51-69a6-418b-ba16-98c865baddd8}</Project>
+      <Name>VehicleTracking.Factory</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

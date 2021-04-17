@@ -36,9 +36,9 @@ namespace VehicleTrackingApi.Controllers
         }
 
         // POST: api/Vehicle
-        public void Post(Vehicle vehicle)
+        public async void Post(Vehicle vehicle)
         {
-            VehicleManager.RegisterVehicle(vehicle);
+           await VehicleManager.RegisterVehicle(vehicle);
         }
 
         // PUT: api/Vehicle/5

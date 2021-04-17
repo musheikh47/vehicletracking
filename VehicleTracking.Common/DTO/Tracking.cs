@@ -8,5 +8,7 @@ namespace VehicleTracking.Common.DTO
 {
     public class Tracking
     {
+        public int ID { get; set; }
+        public int VehicleID { set; get; }
     }
 }

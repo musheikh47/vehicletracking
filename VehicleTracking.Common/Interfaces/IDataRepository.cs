@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace VehicleTracking.Common.Interfaces
 {
-    public interface IDataRepository<T>
+    public interface IDataRepository<T> : IDisposable where T : class
     {
-        int Create(T objectToCreate);
-        bool Update(T objectToUpdate);
-        bool Delete(T objectToDelete);
+        Task<int> Create(T objectToCreate);
+        Task<bool> Update(T objectToUpdate);
+        Task<bool> Delete(T objectToDelete);
     }
 }
