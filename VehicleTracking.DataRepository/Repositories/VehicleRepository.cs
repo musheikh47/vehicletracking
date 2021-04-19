@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,10 +26,25 @@ namespace VehicleTracking.DataRepository.Repositories
         #region IVehicle Repository
         public async Task<int> Create(Common.DTO.Vehicle objectToCreate)
         {
-            var entity = objectToCreate.ToEntity();
-            DbContext.Vehicles.Add(entity);
-            await DbContext.SaveChangesAsync();
-            return entity.VehicleID;
+            try
+            {
+                var entity = objectToCreate.ToEntity();
+                DbContext.Vehicles.Add(entity);
+                await DbContext.SaveChangesAsync();
+                return entity.VehicleID;
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex?.InnerException is UpdateException childEx && childEx.InnerException is SqlException sqlex && sqlex.Number == 2627) // Unique constraint error
+                {
+                    throw new ArgumentException($"Registration number {objectToCreate.RegNumber} already exists.");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+           
         }
         public async Task<bool> Delete(Common.DTO.Vehicle objectToDelete)
         {

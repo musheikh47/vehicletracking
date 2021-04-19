@@ -19,6 +19,7 @@ namespace VehicleTracking.DataRepository.Repositories
 
         }
         #endregion
+
         #region ITrackingRepository
         public async Task<int> Create(Common.DTO.Tracking objectToCreate)
         {

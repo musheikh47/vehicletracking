@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,8 @@ namespace VehicleTracking.DataRepository
             var entity = new VehicleTracking.DataRepository.Tracking();
             entity.TrackingID = dto.ID;
             entity.VehicleID = dto.VehicleID;
+            var tt = typeof(Microsoft.SqlServer.Types.GeographyCollectionAggregate);
+            entity.Location = DbGeography.PointFromText($"Point({dto.Long} {dto.Lat})", 4326); // 4326 represents WGS84 Datum projection system. Google Map uses this projection system. Usage of Geography type will open possibilities to execute geographical queries directly on database.
             return entity;
         }
         public static VehicleTracking.Common.DTO.Tracking ToDto(this VehicleTracking.DataRepository.Tracking entity)

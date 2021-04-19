@@ -11,48 +11,47 @@ using VehicleTracking.Engine;
 
 namespace VehicleTrackingApi.Controllers
 {
-    public class VehicleController : ApiController
+    public class TrackingController : ApiController
     {
-        private VehicleManager _vehicleManager;
-        public VehicleManager VehicleManager
+        private TrackingManager _trackingManager;
+        public TrackingManager TrackingManager
         {
             get
             {
-                if (_vehicleManager == null)
+                if (_trackingManager == null)
                 {
-                    _vehicleManager = new VehicleManager();
+                    _trackingManager = new TrackingManager();
                 }
-                return _vehicleManager;
+                return _trackingManager;
             }
         }
-        // GET: api/Vehicle
+        // GET: api/Tracking
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Vehicle/5
+        // GET: api/Tracking/5
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST: api/Vehicle
-        public async Task<Models.ActionResult> Post(Vehicle vehicle)
+        // POST: api/Tracking
+        public async Task<Models.ActionResult> Post(Tracking tracking)
         {
             Models.ActionResult result = null;
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await VehicleManager.RegisterVehicle(vehicle);
-                    result = new Models.ActionResult(HttpStatusCode.OK, vehicle);
+                    await TrackingManager.Record(tracking);
+                    result = new Models.ActionResult(HttpStatusCode.OK, true);
                 }
                 else
                 {
                     result = new Models.ActionResult(HttpStatusCode.BadRequest, ModelState);
                 }
-
             }
             catch (ArgumentException ex)
             {
@@ -66,12 +65,12 @@ namespace VehicleTrackingApi.Controllers
             return result;
         }
 
-        // PUT: api/Vehicle/5
+        // PUT: api/Tracking/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/Vehicle/5
+        // DELETE: api/Tracking/5
         public void Delete(int id)
         {
         }
@@ -80,7 +79,7 @@ namespace VehicleTrackingApi.Controllers
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            _vehicleManager?.Dispose();
+            _trackingManager?.Dispose();
         }
         #endregion
     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VehicleTracking.Common;
+using VehicleTracking.Common.DTO;
 using VehicleTracking.Common.Interfaces;
 
 namespace VehicleTracking.Engine
@@ -21,6 +23,24 @@ namespace VehicleTracking.Engine
                 }
                 return _trackingRepository;
             }
+        }
+        #endregion
+
+        #region Public Methods
+        public async Task<bool> Record(Tracking trackingEntry)
+        {
+            try
+            {
+                trackingEntry.Time = DateTime.UtcNow.Ticks; // Using UTC time to normalize the time zone.
+                await TrackingRepository.Create(trackingEntry);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error accured while recording tracking data for VehicleID:{trackingEntry.VehicleID}");
+                throw; // Let the consumer decide what they want to do.
+            }
+           
         }
         #endregion
 

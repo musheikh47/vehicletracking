@@ -37,11 +37,6 @@ namespace VehicleTracking.Engine
         {
             try
             {
-                // Validate arguments
-                if (vehicle == null || string.IsNullOrEmpty(vehicle.RegNumber))
-                    throw new ArgumentException("Vehicle object cannot be null and RegNumber cannot be null or empty.");
-
-
                 vehicle.RegDate = DateTime.UtcNow.Ticks; // Using UTC time to normalize the time zone.
                 vehicle.ID = await VehicleRepository.Create(vehicle);
             }
