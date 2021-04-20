@@ -25,18 +25,7 @@ namespace VehicleTrackingApi.Controllers
                 return _vehicleManager;
             }
         }
-        // GET: api/Vehicle
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Vehicle/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+      
         // POST: api/Vehicle
         public async Task<Models.ActionResult> Post(Vehicle vehicle)
         {
@@ -64,16 +53,6 @@ namespace VehicleTrackingApi.Controllers
             }
 
             return result;
-        }
-
-        // PUT: api/Vehicle/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Vehicle/5
-        public void Delete(int id)
-        {
         }
 
         #region Override

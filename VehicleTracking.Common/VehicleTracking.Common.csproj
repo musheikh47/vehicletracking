@@ -44,7 +44,9 @@
   <ItemGroup>
     <Compile Include="DTO\Attribute.cs" />
     <Compile Include="DTO\AttributeValue.cs" />
+    <Compile Include="DTO\SearchResult.cs" />
     <Compile Include="DTO\Tracking.cs" />
+    <Compile Include="DTO\TrackingSearcher.cs" />
     <Compile Include="DTO\Vehicle.cs" />
     <Compile Include="Interfaces\IDataRepository.cs" />
     <Compile Include="Interfaces\ITrackingRepository.cs" />

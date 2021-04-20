@@ -19,5 +19,7 @@ namespace VehicleTracking.Common.DTO
         public double Lat { set; get; }
 
         public long Time { set; get; }
+
+        public string Address { set; get; }
     }
 }
