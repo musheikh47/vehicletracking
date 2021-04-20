@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
@@ -49,7 +50,7 @@ namespace VehicleTracking.DataRepository.Repositories
         public async Task<bool> Delete(Common.DTO.Vehicle objectToDelete)
         {
             var flag = false;
-            var entity = DbContext.Vehicles.FirstOrDefault(x => x.VehicleID == objectToDelete.ID);
+            var entity = await DbContext.Vehicles.FirstOrDefaultAsync(x => x.VehicleID == objectToDelete.ID);
             if (entity != null)
             {
                 DbContext.Vehicles.Remove(entity);
@@ -67,7 +68,7 @@ namespace VehicleTracking.DataRepository.Repositories
         public async Task<bool> Update(Common.DTO.Vehicle objectToUpdate)
         {
             var flag = false;
-            var entity = DbContext.Vehicles.FirstOrDefault(x => x.VehicleID == objectToUpdate.ID);
+            var entity = await DbContext.Vehicles.FirstOrDefaultAsync(x => x.VehicleID == objectToUpdate.ID);
             if (entity != null)
             {
                 entity.RegistrationDate = objectToUpdate.RegDate;

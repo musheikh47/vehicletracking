@@ -31,56 +31,56 @@ namespace VehicleTrackingApi.Controllers
         /// </summary>
         /// <param name="id">VehicleID</param>
         /// <returns></returns>
-        public async Task<Models.ActionResult> Get(int id)
+        public async Task<Models.ActionResult<Tracking>> Get(int id)
         {
-            Models.ActionResult result = null;
+            Models.ActionResult<Tracking> result = null;
             try
             {
                 if (id > 0)
                 {
                     var trackingEntry = await TrackingManager.GetLastTrackingRecord(id);
-                    result = new Models.ActionResult(HttpStatusCode.OK, trackingEntry);
+                    result = new Models.ActionResult<Tracking>(HttpStatusCode.OK, trackingEntry);
                 }
                 else
                 {
-                    result = new Models.ActionResult(HttpStatusCode.BadRequest,"id should be greater than zero.");
+                    result = new Models.ActionResult<Tracking>(HttpStatusCode.BadRequest,"id should be greater than zero.");
                 }
             }
             catch (ArgumentException ex)
             {
-                result = new Models.ActionResult(HttpStatusCode.BadRequest, ex.Message); // In the case of argument exception we will be getting meaning full error message.
+                result = new Models.ActionResult<Tracking>(HttpStatusCode.BadRequest, ex.Message); // In the case of argument exception we will be getting meaning full error message.
             }
             catch (Exception)
             {
-                result = new Models.ActionResult(HttpStatusCode.InternalServerError, "Internal server error has accured while getting last location of the vehicle."); // no need to share implementation details with the consumer.
+                result = new Models.ActionResult<Tracking>(HttpStatusCode.InternalServerError, "Internal server error has accured while getting last location of the vehicle."); // no need to share implementation details with the consumer.
             }
 
             return result;
         }
 
         // POST: api/Tracking
-        public async Task<Models.ActionResult> Post(Tracking tracking)
+        public async Task<Models.ActionResult<bool>> Post(Tracking tracking)
         {
-            Models.ActionResult result = null;
+            Models.ActionResult<bool> result = null;
             try
             {
                 if (tracking != null && ModelState.IsValid)
                 {
                     await TrackingManager.Record(tracking);
-                    result = new Models.ActionResult(HttpStatusCode.OK, true);
+                    result = new Models.ActionResult<bool>(HttpStatusCode.OK, true);
                 }
                 else
                 {
-                    result = tracking == null ? new Models.ActionResult(HttpStatusCode.BadRequest, "Tracking data is required") : new Models.ActionResult(HttpStatusCode.BadRequest, ModelState);
+                    result = tracking == null ? new Models.ActionResult<bool>(HttpStatusCode.BadRequest, "Tracking data is required") : new Models.ActionResult<bool>(HttpStatusCode.BadRequest, ModelState);
                 }
             }
             catch (ArgumentException ex)
             {
-                result = new Models.ActionResult(HttpStatusCode.BadRequest, ex.Message); // In the case of argument exception we will be getting meaning full error message.
+                result = new Models.ActionResult<bool>(HttpStatusCode.BadRequest, ex.Message); // In the case of argument exception we will be getting meaning full error message.
             }
             catch (Exception)
             {
-                result = new Models.ActionResult(HttpStatusCode.InternalServerError, "Internal server error has accured while recording tracking entry."); // no need to share implementation details with the consumer.
+                result = new Models.ActionResult<bool>(HttpStatusCode.InternalServerError, "Internal server error has accured while recording tracking entry."); // no need to share implementation details with the consumer.
             }
 
             return result;
@@ -89,28 +89,28 @@ namespace VehicleTrackingApi.Controllers
         // Search: api/Tracking/Search
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("api/Tracking/Search")]
-        public async Task<Models.ActionResult> Search(TrackingSearcher searcher)
+        public async Task<Models.ActionResult<SearchResult>> Search(TrackingSearcher searcher)
         {
-            Models.ActionResult result = null;
+            Models.ActionResult<SearchResult> result = null;
             try
             {
                 if (searcher != null && ModelState.IsValid)
                 {
                    var searchResult = await TrackingManager.Search(searcher);
-                    result = new Models.ActionResult(HttpStatusCode.OK, searchResult);
+                    result = new Models.ActionResult<SearchResult>(HttpStatusCode.OK, searchResult);
                 }
                 else
                 {
-                    result = searcher == null ? new Models.ActionResult(HttpStatusCode.BadRequest, "Search parameters are required") : new Models.ActionResult(HttpStatusCode.BadRequest, ModelState);
+                    result = searcher == null ? new Models.ActionResult<SearchResult>(HttpStatusCode.BadRequest, "Search parameters are required") : new Models.ActionResult<SearchResult>(HttpStatusCode.BadRequest, ModelState);
                 }
             }
             catch (ArgumentException ex)
             {
-                result = new Models.ActionResult(HttpStatusCode.BadRequest, ex.Message); // In the case of argument exception we will be getting meaning full error message.
+                result = new Models.ActionResult<SearchResult>(HttpStatusCode.BadRequest, ex.Message); // In the case of argument exception we will be getting meaning full error message.
             }
             catch (Exception)
             {
-                result = new Models.ActionResult(HttpStatusCode.InternalServerError, $"Internal server error has accured while searching tracking records for the vehicle:{searcher?.VehicleID}"); // no need to share implementation details with the consumer.
+                result = new Models.ActionResult<SearchResult>(HttpStatusCode.InternalServerError, $"Internal server error has accured while searching tracking records for the vehicle:{searcher?.VehicleID}"); // no need to share implementation details with the consumer.
             }
 
             return result;

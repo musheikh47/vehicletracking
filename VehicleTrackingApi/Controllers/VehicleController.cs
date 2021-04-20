@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -27,29 +28,29 @@ namespace VehicleTrackingApi.Controllers
         }
       
         // POST: api/Vehicle
-        public async Task<Models.ActionResult> Post(Vehicle vehicle)
+        public async Task<Models.ActionResult<Vehicle>> Post(Vehicle vehicle)
         {
-            Models.ActionResult result = null;
+            Models.ActionResult<Vehicle> result = null;
             try
             {
                 if (ModelState.IsValid)
                 {
                     await VehicleManager.RegisterVehicle(vehicle);
-                    result = new Models.ActionResult(HttpStatusCode.OK, vehicle);
+                    result = new Models.ActionResult<Vehicle>(HttpStatusCode.OK, vehicle);
                 }
                 else
                 {
-                    result = new Models.ActionResult(HttpStatusCode.BadRequest, ModelState);
+                    result = new Models.ActionResult<Vehicle>(HttpStatusCode.BadRequest, ModelState);
                 }
 
             }
             catch (ArgumentException ex)
             {
-                result = new Models.ActionResult(HttpStatusCode.BadRequest, ex.Message); // In the case of argument exception we will be getting meaning full error message.
+                result = new Models.ActionResult<Vehicle>(HttpStatusCode.BadRequest, ex.Message); // In the case of argument exception we will be getting meaning full error message.
             }
             catch (Exception)
             {
-                result = new Models.ActionResult(HttpStatusCode.InternalServerError, "Internal server error has accured while registering the vehicle."); // no need to share implementation details with the consumer.
+                result = new Models.ActionResult<Vehicle>(HttpStatusCode.InternalServerError, "Internal server error has accured while registering the vehicle."); // no need to share implementation details with the consumer.
             }
 
             return result;
