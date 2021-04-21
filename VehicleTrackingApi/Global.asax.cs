@@ -22,6 +22,9 @@ namespace VehicleTrackingApi
             SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
             SqlProviderServices.SqlServerTypesAssemblyName =
     "Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91";
+            GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
+
+            Models.UnityHelper.RegisterTypes();
         }
     }
 }

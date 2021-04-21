@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -11,12 +12,16 @@ namespace VehicleTracking.Common.DTO
     public class Vehicle
     {
         // The name of the properties are small on purpose. These properties will travel over the network. Small name will help us to reduce the requst size
-
         public int ID { get; set; }
         
         [Required(ErrorMessage = "RegNumber is required.")]
         [MaxLength(50,ErrorMessage = "RegNumber should be less than or equal to 50 characters.")]
         public string RegNumber { get; set; } 
         public long RegDate { get; set; }
+
+        /// <summary>
+        /// JWT Token will issued by the system at the time of registration. This token will be required in future calls to update location of the vehicle. 
+        /// </summary>
+        public string Token { get; set; }
     }
 }

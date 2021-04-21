@@ -8,6 +8,22 @@ namespace VehicleTracking.DataRepository.Repositories
 {
     public class BaseRepository : IDisposable
     {
+        #region Constructor
+        public BaseRepository()
+        {
+
+        }
+        public BaseRepository(VehicleTrackingDBEntities dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public void Dispose()
+        {
+            _dbContext?.Dispose();
+        }
+        #endregion
+
         #region Private Properties
         private VehicleTrackingDBEntities _dbContext;
         #endregion
@@ -23,21 +39,6 @@ namespace VehicleTracking.DataRepository.Repositories
                 return _dbContext;
             }
 
-        }
-        #endregion
-        #region Constructor
-        public BaseRepository()
-        {
-
-        }
-        public BaseRepository(VehicleTrackingDBEntities dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
-        public void Dispose()
-        {
-            _dbContext?.Dispose();
         }
         #endregion
     }

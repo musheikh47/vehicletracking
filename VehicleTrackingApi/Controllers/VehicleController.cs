@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,6 +10,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using VehicleTracking.Common.DTO;
 using VehicleTracking.Engine;
+using Unity;
+using VehicleTracking.Common.Interfaces;
 
 namespace VehicleTrackingApi.Controllers
 {
@@ -21,12 +24,12 @@ namespace VehicleTrackingApi.Controllers
             {
                 if (_vehicleManager == null)
                 {
-                    _vehicleManager = new VehicleManager();
+                    _vehicleManager = new VehicleManager(Models.UnityHelper.Container.Resolve<IVehicleRepository>());
                 }
                 return _vehicleManager;
             }
         }
-      
+
         // POST: api/Vehicle
         public async Task<Models.ActionResult<Vehicle>> Post(Vehicle vehicle)
         {
@@ -36,6 +39,7 @@ namespace VehicleTrackingApi.Controllers
                 if (ModelState.IsValid)
                 {
                     await VehicleManager.RegisterVehicle(vehicle);
+                    vehicle.Token = Models.JWTHelper.GenerateJWTToken(ConfigurationManager.AppSettings["jwt_issuer"], ConfigurationManager.AppSettings["jwt_secret"], vehicle.ID.ToString(), vehicle.RegNumber, "vehicle");
                     result = new Models.ActionResult<Vehicle>(HttpStatusCode.OK, vehicle);
                 }
                 else

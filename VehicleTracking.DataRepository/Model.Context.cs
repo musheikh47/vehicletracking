@@ -29,5 +29,6 @@ namespace VehicleTracking.DataRepository
         public virtual DbSet<AttributeValue> AttributeValues { get; set; }
         public virtual DbSet<Tracking> Trackings { get; set; }
         public virtual DbSet<Vehicle> Vehicles { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

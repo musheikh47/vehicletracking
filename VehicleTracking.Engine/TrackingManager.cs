@@ -15,18 +15,7 @@ namespace VehicleTracking.Engine
     public class TrackingManager : IDisposable
     {
         #region Private Properties
-        private ITrackingRepository _trackingRepository;
-        private ITrackingRepository TrackingRepository
-        {
-            get
-            {
-                if (_trackingRepository == null)
-                {
-                    _trackingRepository = Factory.RepositoryFactory.GetRepository<ITrackingRepository>();
-                }
-                return _trackingRepository;
-            }
-        }
+        private ITrackingRepository _trackingRepository;       
         private WebClient _webClient;
         private WebClient WebClient
         {
@@ -41,13 +30,20 @@ namespace VehicleTracking.Engine
         }
         #endregion
 
+        #region Constructor
+        public TrackingManager(ITrackingRepository trackingRepository)
+        {
+            _trackingRepository = trackingRepository;
+        }
+        #endregion
+
         #region Public Methods
         public async Task<bool> Record(Tracking trackingEntry)
         {
             try
             {
                 trackingEntry.Time = DateTime.UtcNow.Ticks; // Using UTC time to normalize the time zone.
-                await TrackingRepository.Create(trackingEntry);
+                await _trackingRepository.Create(trackingEntry);
                 return true;
             }
             catch (Exception ex)
@@ -61,7 +57,7 @@ namespace VehicleTracking.Engine
         {
             try
             {
-                var record = await TrackingRepository.GetLastTrackingEntry(vehicleID);
+                var record = await _trackingRepository.GetLastTrackingEntry(vehicleID);
                 record.Address = await ReverseGeocode(record.Lat, record.Long);
                 return record;
             }
@@ -76,7 +72,11 @@ namespace VehicleTracking.Engine
         {
             try
             {
-                var result = await TrackingRepository.Search(searcher);
+                var result = await _trackingRepository.Search(searcher);
+                for (int i = 0; i < result.Path.Length; i++)
+                {
+                    result.Path[i].Address = await ReverseGeocode(result.Path[i].Lat, result.Path[i].Long);
+                }
                 return result;
             }
             catch (Exception ex)
@@ -91,6 +91,7 @@ namespace VehicleTracking.Engine
         #region Private Methods
         private async Task<string> ReverseGeocode(double lat, double lng)
         {
+            // Google geocode api has a usage limit. To better utalize the limit we can keep the result in the database. 
             string address = string.Empty;
             try
             {

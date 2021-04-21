@@ -12,6 +12,7 @@
         <AssociationConnector Association="VehicleTrackingDBModel.FK_AttributeValues_Attributes" ManuallyRouted="false" />
         <AssociationConnector Association="VehicleTrackingDBModel.FK_AttributeValues_Trackings" ManuallyRouted="false" />
         <AssociationConnector Association="VehicleTrackingDBModel.FK_Trackings_Vehicles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="VehicleTrackingDBModel.User" Width="1.5" PointX="5.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

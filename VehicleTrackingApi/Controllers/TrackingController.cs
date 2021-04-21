@@ -8,6 +8,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using VehicleTracking.Common.DTO;
 using VehicleTracking.Engine;
+using System.Security.Claims;
+using Unity;
+using VehicleTracking.Common.Interfaces;
 
 namespace VehicleTrackingApi.Controllers
 {
@@ -20,7 +23,7 @@ namespace VehicleTrackingApi.Controllers
             {
                 if (_trackingManager == null)
                 {
-                    _trackingManager = new TrackingManager();
+                    _trackingManager = new TrackingManager(Models.UnityHelper.Container.Resolve<ITrackingRepository>());
                 }
                 return _trackingManager;
             }
@@ -31,6 +34,7 @@ namespace VehicleTrackingApi.Controllers
         /// </summary>
         /// <param name="id">VehicleID</param>
         /// <returns></returns>
+        [System.Web.Http.Authorize(Roles = "administrator")]
         public async Task<Models.ActionResult<Tracking>> Get(int id)
         {
             Models.ActionResult<Tracking> result = null;
@@ -59,15 +63,26 @@ namespace VehicleTrackingApi.Controllers
         }
 
         // POST: api/Tracking
+        [System.Web.Http.Authorize(Roles = "vehicle")]
         public async Task<Models.ActionResult<bool>> Post(Tracking tracking)
         {
             Models.ActionResult<bool> result = null;
             try
-            {
+            {              
                 if (tracking != null && ModelState.IsValid)
                 {
-                    await TrackingManager.Record(tracking);
-                    result = new Models.ActionResult<bool>(HttpStatusCode.OK, true);
+                    //JWT sub claim will be translated into NameIdentifier
+                    var claim = ClaimsPrincipal.Current.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.NameIdentifier, StringComparison.OrdinalIgnoreCase));
+                    if (claim == null || !int.TryParse(claim.Value, out int vid) || vid != tracking.VehicleID)
+                    {
+                        result = new Models.ActionResult<bool>(HttpStatusCode.Unauthorized, "You are not authorized to update the position of requested vehicle");
+                    }
+                    else
+                    {
+                        await TrackingManager.Record(tracking);
+                        result = new Models.ActionResult<bool>(HttpStatusCode.OK, true);
+                    }
+
                 }
                 else
                 {
@@ -89,6 +104,7 @@ namespace VehicleTrackingApi.Controllers
         // Search: api/Tracking/Search
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("api/Tracking/Search")]
+        [System.Web.Http.Authorize(Roles = "administrator")]
         public async Task<Models.ActionResult<SearchResult>> Search(TrackingSearcher searcher)
         {
             Models.ActionResult<SearchResult> result = null;

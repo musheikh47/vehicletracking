@@ -12,23 +12,13 @@ namespace VehicleTracking.Engine
     public class VehicleManager : IDisposable
     {
         #region Private Properties
-        private IVehicleRepository _vehicleRepository;
-        private IVehicleRepository VehicleRepository
-        {
-            get
-            {
-                if (_vehicleRepository == null)
-                {
-                    _vehicleRepository = VehicleTracking.Factory.RepositoryFactory.GetRepository<IVehicleRepository>();
-                }
-                return _vehicleRepository;
-            }
-        }
+        private IVehicleRepository _vehicleRepository;       
         #endregion
-        #region Constructor
-        public VehicleManager()
-        {
 
+        #region Constructor
+        public VehicleManager(IVehicleRepository vehicleRepository)
+        {
+            _vehicleRepository = vehicleRepository;
         }
         #endregion
 
@@ -38,7 +28,7 @@ namespace VehicleTracking.Engine
             try
             {
                 vehicle.RegDate = DateTime.UtcNow.Ticks; // Using UTC time to normalize the time zone.
-                vehicle.ID = await VehicleRepository.Create(vehicle);
+                vehicle.ID = await _vehicleRepository.Create(vehicle);
             }
             catch (Exception ex)
             {

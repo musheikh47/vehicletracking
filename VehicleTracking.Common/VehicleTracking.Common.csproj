@@ -47,9 +47,11 @@
     <Compile Include="DTO\SearchResult.cs" />
     <Compile Include="DTO\Tracking.cs" />
     <Compile Include="DTO\TrackingSearcher.cs" />
+    <Compile Include="DTO\User.cs" />
     <Compile Include="DTO\Vehicle.cs" />
     <Compile Include="Interfaces\IDataRepository.cs" />
     <Compile Include="Interfaces\ITrackingRepository.cs" />
+    <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IVehicleRepository.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
